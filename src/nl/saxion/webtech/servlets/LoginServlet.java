@@ -1,15 +1,18 @@
 package nl.saxion.webtech.servlets;
 
 import java.io.IOException;
+import java.util.Calendar;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import nl.saxion.webtech.verhuurobjecten.Admin;
 import nl.saxion.webtech.verhuurobjecten.BasicUser;
 import nl.saxion.webtech.verhuurobjecten.Model;
 import nl.saxion.webtech.verhuurobjecten.RoomOwner;
@@ -58,6 +61,12 @@ public class LoginServlet extends HttpServlet {
 					myDispatcher = request.getRequestDispatcher("WEB-INF/addRoom.html");
 				} else if (user instanceof RoomTentant) {
 					myDispatcher = request.getRequestDispatcher("WEB-INF/huurder.html");
+				}else if(user instanceof Admin){
+					
+					Cookie myCookie = new Cookie("timestamp", "" + Calendar.getInstance().getTimeInMillis());
+					myCookie.setMaxAge(-1);
+					
+					// hier moet nog een nieuwe html pagina worden gemaakt voor de admin of een forward
 				}
 				
 				s.setAttribute("username", username);

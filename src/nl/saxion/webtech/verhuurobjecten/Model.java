@@ -9,15 +9,27 @@ public class Model {
 	private List<RoomReservation> reservations;
 	private List<RoomOwner> roomOwners;
 	private List<RoomTentant> roomTentants;
+	private List<Admin> admins;
+	private int timesVisited;
 	
 	public Model() {
 		rooms = new ArrayList<Room>();
 		reservations = new ArrayList<RoomReservation>();
 		roomOwners = new ArrayList<RoomOwner>();
 		roomTentants = new ArrayList<RoomTentant>();
+		admins = new ArrayList<Admin>();
+		timesVisited = 0;
 	}
 	public void AddRoom(Room room) {
 		this.rooms.add(room);
+	}
+	
+	public void incrementTimesVisited(){
+		timesVisited++;
+	}
+	
+	public int getTimesVisited(){
+		return timesVisited;
 	}
 
 	public void AddReservation(RoomReservation reseveration) {
@@ -30,6 +42,10 @@ public class Model {
 
 	public void AddTentant(RoomTentant roomTentant) {
 		this.roomTentants.add(roomTentant);
+	}
+	
+	public void addAdmin(Admin admin){
+		this.admins.add(admin);
 	}
 	
 	public List<BasicUser> getAllUsers(){
