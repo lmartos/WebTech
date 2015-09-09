@@ -2,9 +2,11 @@ package nl.saxion.webtech.servlets;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
 
 import nl.saxion.webtech.verhuurobjecten.Model;
 
+@WebListener("Context listener")
 public class ServletConfig implements ServletContextListener {
 	
 	public ServletConfig(){
@@ -12,15 +14,12 @@ public class ServletConfig implements ServletContextListener {
 	}
 
 	@Override
-	public void contextDestroyed(ServletContextEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	public void contextDestroyed(ServletContextEvent servletContextEvent) {
 	}
 
 	@Override
-	public void contextInitialized(ServletContextEvent arg0) {
-		   arg0.getServletContext().setAttribute("myModel", new Model());
-		
+	public void contextInitialized(ServletContextEvent servletContextEvent) {
+		servletContextEvent.getServletContext().setAttribute("myModel", new Model());
 	}
 
 }

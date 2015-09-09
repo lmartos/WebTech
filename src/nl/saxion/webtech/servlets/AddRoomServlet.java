@@ -53,9 +53,17 @@ public class AddRoomServlet extends HttpServlet {
 		}
 		
 		String username = (String) s.getAttribute("username");
-		String maxPrice = request.getParameter("maxPrice");
-		String surface = request.getParameter("surface");
 		String city = request.getParameter("location");
+		double maxPrice;
+		double surface;
+		
+		try{
+			maxPrice = Double.parseDouble(request.getParameter("maxPrice"));
+			surface = Double.parseDouble(request.getParameter("surface"));
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+			return;
+		}
 		
 		try {
 			model.AddRoom(new Room(model.getOwner(username),surface, maxPrice, city));

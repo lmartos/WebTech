@@ -25,14 +25,11 @@ public class RegisterServlet extends HttpServlet {
      */
     public RegisterServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
     
     @Override
     public void init() throws ServletException {
-    	
     	super.init();
-    	
     	model = (Model) getServletContext().getAttribute("myModel");
     }
 
@@ -54,6 +51,7 @@ public class RegisterServlet extends HttpServlet {
 		if(!password.equals(passwordCheck)){
 			response.sendRedirect("WebContent/register.html");
 		}
+		
 		String username = request.getParameter("username");
 		String type = request.getParameter("group1");
 		
@@ -63,10 +61,14 @@ public class RegisterServlet extends HttpServlet {
 		}else if(type.equals("huurder")){
 			model.AddTentant(new RoomTentant(username, password));
 		}else{
+			response.sendRedirect("WEB_INF/fouteInlog");
 			System.out.println("Something went wrong, neither of the types were used.");
 			return;
 		}
-		response.sendRedirect("WebContent/login.html");
+		
+		System.out.println("account created");
+		
+		response.sendRedirect("login.html");
 		
 	}
 

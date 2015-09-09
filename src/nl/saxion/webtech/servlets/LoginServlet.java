@@ -3,8 +3,6 @@ package nl.saxion.webtech.servlets;
 import java.io.IOException;
 
 import javax.servlet.RequestDispatcher;
-import javax.servlet.Servlet;
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -32,10 +30,9 @@ public class LoginServlet extends HttpServlet {
 		super();
 	}
 
-	/**
-	 * @see Servlet#init(ServletConfig)
-	 */
-	public void init(ServletConfig config) throws ServletException {
+	@Override
+	public void init() throws ServletException {
+		super.init();
 		model = (Model) getServletContext().getAttribute("myModel");
 	}
 
@@ -45,10 +42,11 @@ public class LoginServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		// Check if the user exists
+		
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		RequestDispatcher myDispatcher = null;
+		
 		for (BasicUser user : model.getAllUsers()) {
 			
 			if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
@@ -57,13 +55,9 @@ public class LoginServlet extends HttpServlet {
 			
 
 				if (user instanceof RoomOwner) {
-				
-
-					myDispatcher = request.getRequestDispatcher("WebContent/addRoom.html");
-					
+					myDispatcher = request.getRequestDispatcher("WEB-INF/addRoom.html");
 				} else if (user instanceof RoomTentant) {
-
-					myDispatcher = request.getRequestDispatcher("WebContent/huurder.html");
+					myDispatcher = request.getRequestDispatcher("WEB-INF/huurder.html");
 				}
 				
 				s.setAttribute("username", username);

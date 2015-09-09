@@ -3,11 +3,11 @@ package nl.saxion.webtech.verhuurobjecten;
 public class Room {
 
 	private RoomOwner owner;
-	private String surface;
-	private String maxRentPrice; 
+	private double surface;
+	private double maxRentPrice; 
 	private String city;
 	
-	public Room(RoomOwner owner, String surface, String maxRentPrice, String city){
+	public Room(RoomOwner owner, double surface, double maxRentPrice, String city){
 		this.id = staticId;
 		this.owner = owner;
 		this.surface = surface;
@@ -25,7 +25,7 @@ public class Room {
 		return id;
 	}
 	
-	public String getSurface() {
+	public double getSurface() {
 		return surface;
 	}
 	
@@ -33,7 +33,7 @@ public class Room {
 		return city;
 	}
 	
-	public String getMaxRentPrice() {
+	public double getMaxRentPrice() {
 		return maxRentPrice;
 	}
 	

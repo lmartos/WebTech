@@ -5,38 +5,37 @@ import java.util.List;
 
 public class Model {
 
-	// Kamers
-	private List<Room> rooms = new ArrayList<Room>();
-
+	private List<Room> rooms;
+	private List<RoomReservation> reservations;
+	private List<RoomOwner> roomOwners;
+	private List<RoomTentant> roomTentants;
+	
+	public Model() {
+		rooms = new ArrayList<Room>();
+		reservations = new ArrayList<RoomReservation>();
+		roomOwners = new ArrayList<RoomOwner>();
+		roomTentants = new ArrayList<RoomTentant>();
+	}
 	public void AddRoom(Room room) {
 		this.rooms.add(room);
 	}
-
-	// Reservaties
-	private List<RoomReservation> reservations = new ArrayList<RoomReservation>();
 
 	public void AddReservation(RoomReservation reseveration) {
 		this.reservations.add(reseveration);
 	}
 
-	// Verhuurders
-	private List<RoomOwner> roomOwners = new ArrayList<RoomOwner>();
-
 	public void AddRoomOwner(RoomOwner roomOwner) {
 		this.roomOwners.add(roomOwner);
 	}
-
-	// Huurders
-	private List<RoomTentant> roomTentants = new ArrayList<RoomTentant>();
 
 	public void AddTentant(RoomTentant roomTentant) {
 		this.roomTentants.add(roomTentant);
 	}
 	
 	public List<BasicUser> getAllUsers(){
-		List<BasicUser> allUsers = new ArrayList<BasicUser>();
-		allUsers.addAll(roomTentants);
-		allUsers.addAll(roomOwners);
+			List<BasicUser> allUsers = new ArrayList<BasicUser>();
+			allUsers.addAll(roomTentants);
+			allUsers.addAll(roomOwners);
 		return allUsers;
 	}
 	
