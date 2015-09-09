@@ -39,6 +39,10 @@ public class Model {
 		return allUsers;
 	}
 	
+	public List<Room> getRooms() {
+		return rooms;
+	}
+	
 	public RoomOwner getOwner(String username) throws Exception{
 		for (RoomOwner owner : roomOwners) {
 			if (owner.getUsername().equals(username)) {

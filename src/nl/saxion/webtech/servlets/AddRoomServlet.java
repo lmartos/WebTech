@@ -2,6 +2,7 @@ package nl.saxion.webtech.servlets;
 
 import java.io.IOException;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -59,17 +60,20 @@ public class AddRoomServlet extends HttpServlet {
 		
 		try{
 			maxPrice = Double.parseDouble(request.getParameter("maxPrice"));
-			surface = Double.parseDouble(request.getParameter("surface"));
+			surface = Double.parseDouble(request.getParameter("surfaceInput"));
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 			return;
 		}
 		
 		try {
-			model.AddRoom(new Room(model.getOwner(username),surface, maxPrice, city));
+			model.AddRoom(new Room(model.getOwner(username), surface, maxPrice, city));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		RequestDispatcher myDispatcher = request.getRequestDispatcher("WEB-INF/addRoom.html");
+		myDispatcher.forward(request, response);
 	}
 
 }
