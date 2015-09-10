@@ -2,6 +2,7 @@ package nl.saxion.webtech.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Timestamp;
 import java.util.Calendar;
 
 import javax.servlet.RequestDispatcher;
@@ -74,8 +75,8 @@ public class LoginServlet extends HttpServlet {
 						}
 					}
 					
-					
-					Cookie myCookie = new Cookie("timestamp", "" + Calendar.getInstance().getTimeInMillis());
+					Timestamp currentTime = new Timestamp(Calendar.getInstance().getTimeInMillis());
+					Cookie myCookie = new Cookie("timestamp", "" + currentTime);
 					myCookie.setMaxAge(-1);
 					response.addCookie(myCookie);
 					
@@ -92,6 +93,8 @@ public class LoginServlet extends HttpServlet {
 				    
 				    out.println("times visited: " + model.getTimesVisited());
 				    out.println("last visited: " + model.getLastVisited());
+				    out.println("<br>");
+				    out.println("<strong> Users: </strong>");
 				    out.println("<br>");
 				    
 				    for(BasicUser client: model.getAllUsers()){
