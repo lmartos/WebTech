@@ -1,6 +1,7 @@
 package nl.saxion.webtech.servlets;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Calendar;
 
 import javax.servlet.RequestDispatcher;
@@ -63,10 +64,45 @@ public class LoginServlet extends HttpServlet {
 					myDispatcher = request.getRequestDispatcher("WEB-INF/huurder.html");
 				}else if(user instanceof Admin){
 					
+					Cookie[] cookies = request.getCookies();
+					
+					if(cookies != null){
+						for(Cookie cookie : request.getCookies()){
+							if(cookie.getName().equals("timestamp")){
+								model.setLastVisited(cookie.getValue());
+							}
+						}
+					}
+					
+					
 					Cookie myCookie = new Cookie("timestamp", "" + Calendar.getInstance().getTimeInMillis());
 					myCookie.setMaxAge(-1);
+					response.addCookie(myCookie);
 					
-					// hier moet nog een nieuwe html pagina worden gemaakt voor de admin of een forward
+					model.incrementTimesVisited();
+					
+					response.setContentType("text/html");
+					PrintWriter out = response.getWriter();
+					
+					out.println("<html>");
+				    out.println("<head>");
+				    out.println("<title>Rooms</title>");
+				    out.println("</head>");
+				    out.println("<body bgcolor=\"white\">");
+				    
+				    out.println("times visited: " + model.getTimesVisited());
+				    out.println("last visited: " + model.getLastVisited());
+				    out.println("<br>");
+				    
+				    for(BasicUser client: model.getAllUsers()){
+				    	out.println(client.getUsername() + " " + client.getClass().getSimpleName());
+				    	out.println("<br>");
+				    }
+				    out.println("</body>");
+				    out.println("</html>");
+				    out.close();
+				    return;
+				    
 				}
 				
 				s.setAttribute("username", username);

@@ -11,6 +11,7 @@ public class Model {
 	private List<RoomTentant> roomTentants;
 	private List<Admin> admins;
 	private int timesVisited;
+	private String lastVisited;
 	
 	public Model() {
 		rooms = new ArrayList<Room>();
@@ -18,7 +19,9 @@ public class Model {
 		roomOwners = new ArrayList<RoomOwner>();
 		roomTentants = new ArrayList<RoomTentant>();
 		admins = new ArrayList<Admin>();
+		admins.add(new Admin("admin", "admin"));
 		timesVisited = 0;
+		lastVisited = "This is your first visit.";
 	}
 	public void AddRoom(Room room) {
 		this.rooms.add(room);
@@ -30,6 +33,14 @@ public class Model {
 	
 	public int getTimesVisited(){
 		return timesVisited;
+	}
+	
+	public void setLastVisited(String time){
+		lastVisited = time;
+	}
+	
+	public String getLastVisited(){
+		return lastVisited;
 	}
 
 	public void AddReservation(RoomReservation reseveration) {
@@ -52,6 +63,7 @@ public class Model {
 			List<BasicUser> allUsers = new ArrayList<BasicUser>();
 			allUsers.addAll(roomTentants);
 			allUsers.addAll(roomOwners);
+			allUsers.addAll(admins);
 		return allUsers;
 	}
 	
