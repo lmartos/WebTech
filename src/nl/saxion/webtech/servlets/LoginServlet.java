@@ -45,79 +45,132 @@ public class LoginServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
-		RequestDispatcher myDispatcher = null;
+		RequestDispatcher dispatcher;
+		
+		HttpSession session = request.getSession();
 		
 		for (BasicUser user : model.getAllUsers()) {
-			
-			if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
-
-				HttpSession s = request.getSession();
-			
-
-				if (user instanceof RoomOwner) {
-					myDispatcher = request.getRequestDispatcher("WEB-INF/addRoom.html");
-				} else if (user instanceof RoomTentant) {
-					myDispatcher = request.getRequestDispatcher("WEB-INF/huurder.html");
-				}else if(user instanceof Admin){
-					
+			if ((user.getUsername().equals(username) && user.getPassword().equals(password)) ) {
+				
+				if (user instanceof Admin) {
 					Cookie[] cookies = request.getCookies();
 					
-					if(cookies != null){
-						for(Cookie cookie : request.getCookies()){
-							if(cookie.getName().equals("timestamp")){
-								model.setLastVisited(cookie.getValue());
-							}
-						}
-					}
+					Cookie timestampCookie = getTimestampCookie(cookies);
+					response.addCookie(timestampCookie);
 					
-					Timestamp currentTime = new Timestamp(Calendar.getInstance().getTimeInMillis());
-					Cookie myCookie = new Cookie("timestamp", "" + currentTime);
-					myCookie.setMaxAge(-1);
-					response.addCookie(myCookie);
-					
+					model.setLastVisited(timestampCookie.getValue());
 					model.incrementTimesVisited();
 					
 					response.setContentType("text/html");
 					PrintWriter out = response.getWriter();
-					
-					out.println("<html>");
-				    out.println("<head>");
-				    out.println("<title>Rooms</title>");
-				    out.println("</head>");
-				    out.println("<body bgcolor=\"white\">");
-				    
-				    out.println("times visited: " + model.getTimesVisited());
-				    out.println("last visited: " + model.getLastVisited());
-				    out.println("<br>");
-				    out.println("<strong> Users: </strong>");
-				    out.println("<br>");
-				    
-				    for(BasicUser client: model.getAllUsers()){
-				    	out.println(client.getUsername() + " " + client.getClass().getSimpleName());
-				    	out.println("<br>");
-				    }
-				    out.println("</body>");
-				    out.println("</html>");
-				    out.close();
-				    return;
-				    
+					printAdminPage(out);
+				} else {
+					dispatcher = getUserDispatcher(user, request);
+					dispatcher.forward(request, response);
 				}
-				
-				s.setAttribute("username", username);
-				myDispatcher.forward(request, response);
+
+				session.setAttribute("username", username);
 				return;
 			}
+			
 		}
-
-		myDispatcher = request.getRequestDispatcher("WEB-INF/fouteInlog.html");
-		myDispatcher.forward(request, response);
 		
-
+		dispatcher = request.getRequestDispatcher("WEB-INF/fouteInlog.html");
+		dispatcher.forward(request, response);
 	}
 
+	/**
+	 * @param user to specify the dispatcher
+	 * @param request
+	 * @return a dispatcher specified for the user, if the user is unkown error page is loaded.
+	 */
+	private RequestDispatcher getUserDispatcher(BasicUser user, HttpServletRequest request) {
+		if (user instanceof RoomOwner) {
+			return request.getRequestDispatcher("WEB-INF/addRoom.html");
+		} else if (user instanceof RoomTentant) {
+			return request.getRequestDispatcher("WEB-INF/tentant.html");
+		} else {
+			return request.getRequestDispatcher("WEB-INF/fouteInlog.html");
+		}
+	}
+	
+	/**
+	 * @param out
+	 * @throws IOException
+	 */
+	private void printAdminPage(PrintWriter out)
+			throws IOException {
+		
+		out.println("<html>");
+		out.println("<head>");
+		out.println("<title>Rooms</title>");
+		out.println("</head>");
+		out.println("<body bgcolor=\"white\">");
+		
+		out.println("times visited: " + model.getTimesVisited());
+		out.println("last visited: " + model.getLastVisited());
+		out.println("<br>");
+		out.println("<strong> Users: </strong>");
+		out.println("<br>");
+		
+		for(BasicUser client: model.getAllUsers()){
+			out.println(client.getUsername() + " " + client.getClass().getSimpleName());
+			out.println("<br>");
+		}
+		
+		out.println("</body>");
+		out.println("</html>");
+		out.close();
+	}
+
+	/**
+	 * Set the Timestamp cookie value in a model,
+	 * if it doesn't exist a cookie will be created
+	 * @param request
+	 * @param response
+	 * @param cookies
+	 */
+	private Cookie getTimestampCookie(Cookie[] cookies) {
+		if(cookies == null || !hasTimestampCookie(cookies)){
+			return createTimestampCookie();
+		} else {
+			return retreiveTimestampCookie(cookies);
+		}
+	}
+
+	/**
+	 * Loop all given cookies and checks if Timestamp cookie exists.
+	 * @param request
+	 * @return true if timeStamp cookie exists, else return false.
+	 */
+	private boolean hasTimestampCookie(Cookie[] cookies) {
+		for(Cookie cookie : cookies){
+			if(cookie.getName().equals("timestamp")){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private Cookie retreiveTimestampCookie(Cookie[] cookies) {
+		for(Cookie cookie : cookies){
+			if(cookie.getName().equals("timestamp")){
+				return cookie;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * @return a cooke created with a Timestamp of the current time.
+	 */
+	private Cookie createTimestampCookie() {
+		Timestamp currentTime = new Timestamp(Calendar.getInstance().getTimeInMillis());
+		Cookie myCookie = new Cookie("timestamp", "" + currentTime);
+		myCookie.setMaxAge(-1);
+		return myCookie;
+	}
 }

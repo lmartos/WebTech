@@ -44,7 +44,6 @@ public class RegisterServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		String password = request.getParameter("password");
 		String passwordCheck = request.getParameter("passwordCheck");
 		
@@ -55,21 +54,26 @@ public class RegisterServlet extends HttpServlet {
 		String username = request.getParameter("username");
 		String type = request.getParameter("group1");
 		
-		if(type.equals("verhuurder")){
-			model.AddRoomOwner(new RoomOwner(username, password));
-			
-		}else if(type.equals("huurder")){
-			model.AddTentant(new RoomTentant(username, password));
-		}else{
+		if (!createUser(type, username, passwordCheck)) {
 			response.sendRedirect("WEB_INF/fouteInlog");
 			System.out.println("Something went wrong, neither of the types were used.");
 			return;
 		}
 		
 		System.out.println("account created");
-		
 		response.sendRedirect("login.html");
-		
+	}
+	
+	private boolean createUser(String type, String username, String password) {
+		if(type.equals("verhuurder")){
+			model.AddRoomOwner(new RoomOwner(username, password));
+			return true;
+		}else if(type.equals("huurder")){
+			model.AddTentant(new RoomTentant(username, password));
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }

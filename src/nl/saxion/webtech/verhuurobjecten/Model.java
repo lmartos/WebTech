@@ -10,10 +10,15 @@ public class Model {
 	private List<RoomOwner> roomOwners;
 	private List<RoomTentant> roomTentants;
 	private List<Admin> admins;
+	
 	private int timesVisited;
 	private String lastVisited;
 	
 	public Model() {
+		init();
+	}
+	
+	private void init() {
 		rooms = new ArrayList<Room>();
 		reservations = new ArrayList<RoomReservation>();
 		roomOwners = new ArrayList<RoomOwner>();
@@ -23,6 +28,7 @@ public class Model {
 		timesVisited = 0;
 		lastVisited = "This is your first visit.";
 	}
+	
 	public void AddRoom(Room room) {
 		this.rooms.add(room);
 	}
@@ -79,6 +85,16 @@ public class Model {
 		}
 		
 		throw new Exception("room owner not found");
+	}
+	
+	public BasicUser getUser(String username){
+		for (BasicUser user : getAllUsers()) {
+			if (user.getUsername().equals(username)) {
+				return user;
+			}
+		}
+		
+		return null;
 	}
 	
 }
