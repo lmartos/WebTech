@@ -46,7 +46,6 @@ public class UserManager {
 		User user = users.get(username);
 		
 		if (user == null) {
-			//TODO: create specific exception
 			throw new UserNotFoundException("User " + username + " does not exist" );
 		} else {
 			return (T) user;

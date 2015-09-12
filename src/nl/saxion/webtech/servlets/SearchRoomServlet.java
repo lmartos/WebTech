@@ -70,13 +70,13 @@ public class SearchRoomServlet extends HttpServlet{
 	private List<Room> getSpecifiedRooms(String location, double maxPrice, double surface) {
 		List<Room> specifiedRooms = new ArrayList<Room>();
 		if(!location.isEmpty()){
-			for (Room room : model.getRooms()) {
+			for (Room room : model.getRoomManager().getRooms()) {
 				if (room.getCity().equals(location) && room.getMaxRentPrice() <= maxPrice && room.getSurface() >= surface) {
 					specifiedRooms.add(room);
 				}
 			}	
 		}else{
-			for (Room room : model.getRooms()) {
+			for (Room room : model.getRoomManager().getRooms()) {
 				if (room.getMaxRentPrice() <= maxPrice && room.getSurface() >= surface) {
 					specifiedRooms.add(room);
 				}

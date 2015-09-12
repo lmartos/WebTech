@@ -65,7 +65,7 @@ public class AddRoomServlet extends HttpServlet {
 			return;
 		}
 		
-		model.AddRoom(new Room(model.getUserManager().getUser(username, RoomOwner.class), surface, maxPrice, city));
+		model.getRoomManager().addRoom(new Room(model.getUserManager().getUser(username, RoomOwner.class), surface, maxPrice, city));
 		
 
 		RequestDispatcher myDispatcher = request.getRequestDispatcher("WEB-INF/addRoom.html");

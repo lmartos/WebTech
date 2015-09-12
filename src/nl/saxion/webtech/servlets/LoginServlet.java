@@ -17,7 +17,7 @@ import javax.servlet.http.HttpSession;
 import nl.saxion.webtech.model.Admin;
 import nl.saxion.webtech.model.Model;
 import nl.saxion.webtech.model.RoomOwner;
-import nl.saxion.webtech.model.RoomTennant;
+import nl.saxion.webtech.model.Tennant;
 import nl.saxion.webtech.model.User;
 
 /**
@@ -61,17 +61,18 @@ public class LoginServlet extends HttpServlet {
 		User user = model.getUserManager().getUser(username, User.class);
 
 		if (user instanceof Admin) {
-			Cookie[] cookies = request.getCookies();
+			Admin admin = (Admin) user;
 
-			Cookie timestampCookie = getTimestampCookie(cookies);
-			response.addCookie(timestampCookie);
+			Cookie timestampCookie = getTimestampCookie(request);
+			if (timestampCookie != null) {
+				admin.setLastVisited(timestampCookie.getValue());				
+			}
 
-			model.setLastVisited(timestampCookie.getValue());
-			model.incrementTimesVisited();
+			response.addCookie(createTimestampCookie());
+			admin.incrementTimesVisited();
 
-			response.setContentType("text/html");
-			PrintWriter out = response.getWriter();
-			printAdminPage(out);
+			printAdminPage(request, response, admin);
+
 		} else {
 			dispatcher = getUserDispatcher(user, request);
 			dispatcher.forward(request, response);
@@ -91,7 +92,7 @@ public class LoginServlet extends HttpServlet {
 	private RequestDispatcher getUserDispatcher(User user, HttpServletRequest request) {
 		if (user instanceof RoomOwner) {
 			return request.getRequestDispatcher("WEB-INF/addRoom.html");
-		} else if (user instanceof RoomTennant) {
+		} else if (user instanceof Tennant) {
 			return request.getRequestDispatcher("WEB-INF/tentant.html");
 		} else {
 			return request.getRequestDispatcher("WEB-INF/fouteInlog.html");
@@ -102,7 +103,10 @@ public class LoginServlet extends HttpServlet {
 	 * @param out
 	 * @throws IOException
 	 */
-	private void printAdminPage(PrintWriter out) throws IOException {
+	private void printAdminPage(HttpServletRequest request, HttpServletResponse response, Admin admin) throws IOException {
+		
+		response.setContentType("text/html");
+		PrintWriter out = response.getWriter();
 
 		out.println("<html>");
 		out.println("<head>");
@@ -110,8 +114,8 @@ public class LoginServlet extends HttpServlet {
 		out.println("</head>");
 		out.println("<body bgcolor=\"white\">");
 
-		out.println("times visited: " + model.getTimesVisited());
-		out.println("last visited: " + model.getLastVisited());
+		out.println("times visited: " + admin.getTimesVisited());
+		out.println("last visited: " + admin.getLastVisited());
 		out.println("<br>");
 		out.println("<strong> Users: </strong>");
 		out.println("<br>");
@@ -126,38 +130,15 @@ public class LoginServlet extends HttpServlet {
 		out.close();
 	}
 
-	/**
-	 * Set the Timestamp cookie value in a model, if it doesn't exist a cookie
-	 * will be created
-	 * 
-	 * @param request
-	 * @param response
-	 * @param cookies
-	 */
-	private Cookie getTimestampCookie(Cookie[] cookies) {
-		if (cookies == null || !hasTimestampCookie(cookies)) {
-			return createTimestampCookie();
-		} else {
-			return retreiveTimestampCookie(cookies);
-		}
-	}
 
 	/**
-	 * Loop all given cookies and checks if Timestamp cookie exists.
+	 * Loop all given cookies and return Timestamp cookie.
 	 * 
 	 * @param request
-	 * @return true if timeStamp cookie exists, else return false.
+	 * @return Cookie timestamp cookie, or null if not exists
 	 */
-	private boolean hasTimestampCookie(Cookie[] cookies) {
-		for (Cookie cookie : cookies) {
-			if (cookie.getName().equals("timestamp")) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private Cookie retreiveTimestampCookie(Cookie[] cookies) {
+	private Cookie getTimestampCookie(HttpServletRequest request) {
+		Cookie[] cookies = request.getCookies();
 		for (Cookie cookie : cookies) {
 			if (cookie.getName().equals("timestamp")) {
 				return cookie;
@@ -165,6 +146,7 @@ public class LoginServlet extends HttpServlet {
 		}
 		return null;
 	}
+
 
 	/**
 	 * @return a cooke created with a Timestamp of the current time.
