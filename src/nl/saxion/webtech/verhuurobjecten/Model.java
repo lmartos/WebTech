@@ -1,15 +1,15 @@
 package nl.saxion.webtech.verhuurobjecten;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 public class Model {
 
 	private List<Room> rooms;
 	private List<RoomReservation> reservations;
-	private List<RoomOwner> roomOwners;
-	private List<RoomTentant> roomTentants;
-	private List<Admin> admins;
+	private HashMap<String, User> users;
 	
 	private int timesVisited;
 	private String lastVisited;
@@ -19,12 +19,10 @@ public class Model {
 	}
 	
 	private void init() {
+		users = new HashMap<>();
 		rooms = new ArrayList<Room>();
 		reservations = new ArrayList<RoomReservation>();
-		roomOwners = new ArrayList<RoomOwner>();
-		roomTentants = new ArrayList<RoomTentant>();
-		admins = new ArrayList<Admin>();
-		admins.add(new Admin("admin", "admin"));
+		addUser(new Admin("admin","admin"));
 		timesVisited = 0;
 		lastVisited = "This is your first visit.";
 	}
@@ -52,49 +50,50 @@ public class Model {
 	public void AddReservation(RoomReservation reseveration) {
 		this.reservations.add(reseveration);
 	}
-
-	public void AddRoomOwner(RoomOwner roomOwner) {
-		this.roomOwners.add(roomOwner);
-	}
-
-	public void AddTentant(RoomTentant roomTentant) {
-		this.roomTentants.add(roomTentant);
+	
+	public <T extends User> void addUser(T user) {
+		users.put(user.getUsername(), user);
 	}
 	
-	public void addAdmin(Admin admin){
-		this.admins.add(admin);
+	public boolean verifyAccount(String username, String password) {
+		User user = users.get(username);
+		
+		if (user == null) {
+			return false;
+		}
+		
+		if (!user.getPassword().equals(password)) {
+			return false;
+		}
+		
+		return true;
 	}
 	
-	public List<BasicUser> getAllUsers(){
-			List<BasicUser> allUsers = new ArrayList<BasicUser>();
-			allUsers.addAll(roomTentants);
-			allUsers.addAll(roomOwners);
-			allUsers.addAll(admins);
-		return allUsers;
+	public Collection<User> getUsers() {
+		return users.values();
+	}
+	
+	/**
+	 * Get the user from userlist.
+	 * @param username the name of the user.
+	 * @param clazz subtype of User.
+	 * @return a specified subtype of User.
+	 * @throws UserNotFoundException 
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends User> T getUser(String username, Class<T> clazz){
+		User user = users.get(username);
+		
+		if (user == null) {
+			//TODO: create specific exception
+			throw new UserNotFoundException("User " + username + " does not exist" );
+		} else {
+			return (T) user;
+		}
+				
 	}
 	
 	public List<Room> getRooms() {
 		return rooms;
 	}
-	
-	public RoomOwner getOwner(String username) throws Exception{
-		for (RoomOwner owner : roomOwners) {
-			if (owner.getUsername().equals(username)) {
-				return owner;
-			}
-		}
-		
-		throw new Exception("room owner not found");
-	}
-	
-	public BasicUser getUser(String username){
-		for (BasicUser user : getAllUsers()) {
-			if (user.getUsername().equals(username)) {
-				return user;
-			}
-		}
-		
-		return null;
-	}
-	
 }

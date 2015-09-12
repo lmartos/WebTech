@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import nl.saxion.webtech.verhuurobjecten.Model;
 import nl.saxion.webtech.verhuurobjecten.RoomOwner;
-import nl.saxion.webtech.verhuurobjecten.RoomTentant;
+import nl.saxion.webtech.verhuurobjecten.RoomTennant;
 
 /**
  * Servlet implementation class RegisterServlet
@@ -37,7 +37,6 @@ public class RegisterServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 	}
 
 	/**
@@ -65,15 +64,17 @@ public class RegisterServlet extends HttpServlet {
 	}
 	
 	private boolean createUser(String type, String username, String password) {
+		boolean created = false;
+		
 		if(type.equals("verhuurder")){
-			model.AddRoomOwner(new RoomOwner(username, password));
-			return true;
+			model.addUser(new RoomOwner(username, password));
+			created = true;
 		}else if(type.equals("huurder")){
-			model.AddTentant(new RoomTentant(username, password));
-			return true;
-		} else {
-			return false;
-		}
+			model.addUser(new RoomTennant(username, password));
+			created = true;
+		} 
+		
+		return created;
 	}
 
 }

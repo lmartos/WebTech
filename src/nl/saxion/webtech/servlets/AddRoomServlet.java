@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import nl.saxion.webtech.verhuurobjecten.Model;
 import nl.saxion.webtech.verhuurobjecten.Room;
+import nl.saxion.webtech.verhuurobjecten.RoomOwner;
 
 /**
  * Servlet implementation class AddRoomServlet
@@ -25,7 +26,6 @@ public class AddRoomServlet extends HttpServlet {
      */
     public AddRoomServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
     
     @Override
@@ -38,8 +38,7 @@ public class AddRoomServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-	}
+			}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -66,11 +65,8 @@ public class AddRoomServlet extends HttpServlet {
 			return;
 		}
 		
-		try {
-			model.AddRoom(new Room(model.getOwner(username), surface, maxPrice, city));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		model.AddRoom(new Room(model.getUser(username, RoomOwner.class), surface, maxPrice, city));
+		
 
 		RequestDispatcher myDispatcher = request.getRequestDispatcher("WEB-INF/addRoom.html");
 		myDispatcher.forward(request, response);

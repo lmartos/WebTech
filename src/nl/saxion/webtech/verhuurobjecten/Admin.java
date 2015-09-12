@@ -1,6 +1,6 @@
 package nl.saxion.webtech.verhuurobjecten;
 
-public class Admin extends BasicUser {
+public class Admin extends User {
 
 	public Admin(String username, String password) {
 		super(username, password);
