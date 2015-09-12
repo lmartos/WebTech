@@ -4,7 +4,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
-import nl.saxion.webtech.verhuurobjecten.Model;
+import nl.saxion.webtech.model.Model;
 
 @WebListener("Context listener")
 public class ServletConfig implements ServletContextListener {

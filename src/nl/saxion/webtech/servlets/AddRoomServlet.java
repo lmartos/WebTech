@@ -10,9 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import nl.saxion.webtech.verhuurobjecten.Model;
-import nl.saxion.webtech.verhuurobjecten.Room;
-import nl.saxion.webtech.verhuurobjecten.RoomOwner;
+import nl.saxion.webtech.model.Model;
+import nl.saxion.webtech.model.Room;
+import nl.saxion.webtech.model.RoomOwner;
 
 /**
  * Servlet implementation class AddRoomServlet
@@ -65,7 +65,7 @@ public class AddRoomServlet extends HttpServlet {
 			return;
 		}
 		
-		model.AddRoom(new Room(model.getUser(username, RoomOwner.class), surface, maxPrice, city));
+		model.AddRoom(new Room(model.getUserManager().getUser(username, RoomOwner.class), surface, maxPrice, city));
 		
 
 		RequestDispatcher myDispatcher = request.getRequestDispatcher("WEB-INF/addRoom.html");

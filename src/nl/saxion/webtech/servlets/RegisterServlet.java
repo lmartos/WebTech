@@ -8,9 +8,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import nl.saxion.webtech.verhuurobjecten.Model;
-import nl.saxion.webtech.verhuurobjecten.RoomOwner;
-import nl.saxion.webtech.verhuurobjecten.RoomTennant;
+import nl.saxion.webtech.model.Model;
+import nl.saxion.webtech.model.RoomOwner;
+import nl.saxion.webtech.model.RoomTennant;
 
 /**
  * Servlet implementation class RegisterServlet
@@ -67,10 +67,10 @@ public class RegisterServlet extends HttpServlet {
 		boolean created = false;
 		
 		if(type.equals("verhuurder")){
-			model.addUser(new RoomOwner(username, password));
+			model.getUserManager().addUser(new RoomOwner(username, password));
 			created = true;
 		}else if(type.equals("huurder")){
-			model.addUser(new RoomTennant(username, password));
+			model.getUserManager().addUser(new RoomTennant(username, password));
 			created = true;
 		} 
 		

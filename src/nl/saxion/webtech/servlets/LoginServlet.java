@@ -14,11 +14,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import nl.saxion.webtech.verhuurobjecten.Admin;
-import nl.saxion.webtech.verhuurobjecten.User;
-import nl.saxion.webtech.verhuurobjecten.Model;
-import nl.saxion.webtech.verhuurobjecten.RoomOwner;
-import nl.saxion.webtech.verhuurobjecten.RoomTennant;
+import nl.saxion.webtech.model.Admin;
+import nl.saxion.webtech.model.Model;
+import nl.saxion.webtech.model.RoomOwner;
+import nl.saxion.webtech.model.RoomTennant;
+import nl.saxion.webtech.model.User;
 
 /**
  * Servlet implementation class LoginServlet
@@ -53,12 +53,12 @@ public class LoginServlet extends HttpServlet {
 
 		HttpSession session = request.getSession();
 		
-		if (!model.verifyAccount(username, password)) {
+		if (!model.getUserManager().verifyAccount(username, password)) {
 			dispatcher = request.getRequestDispatcher("WEB-INF/fouteInlog.html");
 			dispatcher.forward(request, response);
 		}
 		
-		User user = model.getUser(username, User.class);
+		User user = model.getUserManager().getUser(username, User.class);
 
 		if (user instanceof Admin) {
 			Cookie[] cookies = request.getCookies();
@@ -116,7 +116,7 @@ public class LoginServlet extends HttpServlet {
 		out.println("<strong> Users: </strong>");
 		out.println("<br>");
 
-		for (User client : model.getUsers()) {
+		for (User client : model.getUserManager().getUsers()) {
 			out.println(client.getUsername() + " " + client.getClass().getSimpleName());
 			out.println("<br>");
 		}

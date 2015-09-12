@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import nl.saxion.webtech.verhuurobjecten.Model;
-import nl.saxion.webtech.verhuurobjecten.Room;
+import nl.saxion.webtech.model.Model;
+import nl.saxion.webtech.model.Room;
 
 @WebServlet("/SearchRoomServlet")
 public class SearchRoomServlet extends HttpServlet{

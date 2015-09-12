@@ -1,4 +1,4 @@
-package nl.saxion.webtech.verhuurobjecten;
+package nl.saxion.webtech.model;
 
 public class Admin extends User {
 

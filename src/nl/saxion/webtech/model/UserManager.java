@@ -1,54 +1,15 @@
-package nl.saxion.webtech.verhuurobjecten;
+package nl.saxion.webtech.model;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
-public class Model {
-
-	private List<Room> rooms;
-	private List<RoomReservation> reservations;
-	private HashMap<String, User> users;
+public class UserManager {
+	private Map<String, User> users;
 	
-	private int timesVisited;
-	private String lastVisited;
-	
-	public Model() {
-		init();
-	}
-	
-	private void init() {
+	public UserManager() {
 		users = new HashMap<>();
-		rooms = new ArrayList<Room>();
-		reservations = new ArrayList<RoomReservation>();
 		addUser(new Admin("admin","admin"));
-		timesVisited = 0;
-		lastVisited = "This is your first visit.";
-	}
-	
-	public void AddRoom(Room room) {
-		this.rooms.add(room);
-	}
-	
-	public void incrementTimesVisited(){
-		timesVisited++;
-	}
-	
-	public int getTimesVisited(){
-		return timesVisited;
-	}
-	
-	public void setLastVisited(String time){
-		lastVisited = time;
-	}
-	
-	public String getLastVisited(){
-		return lastVisited;
-	}
-
-	public void AddReservation(RoomReservation reseveration) {
-		this.reservations.add(reseveration);
 	}
 	
 	public <T extends User> void addUser(T user) {
@@ -91,9 +52,5 @@ public class Model {
 			return (T) user;
 		}
 				
-	}
-	
-	public List<Room> getRooms() {
-		return rooms;
 	}
 }
