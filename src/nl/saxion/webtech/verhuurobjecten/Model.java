@@ -59,7 +59,7 @@ public class Model {
 	 * @return boolean true if the user does not exist already and will be registered false otherwise
 	 */
 	public boolean AddRoomOwner(RoomOwner roomOwner) {
-		if(!roomOwners.contains(roomOwner)){
+		if((getUser(roomOwner.getUsername()) == null)){
 		this.roomOwners.add(roomOwner);
 		return true;
 		}
@@ -73,7 +73,7 @@ public class Model {
 	 */
 	
 	public boolean AddTentant(RoomTentant roomTentant) {
-		if(!roomTentants.contains(roomTentant)){
+		if((getUser(roomTentant.getUsername()) == null)){
 			this.roomTentants.add(roomTentant);
 			return true;
 		}
