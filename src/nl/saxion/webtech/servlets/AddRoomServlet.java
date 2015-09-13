@@ -46,13 +46,13 @@ public class AddRoomServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		
-		HttpSession s = request.getSession(false);
+		HttpSession session = request.getSession(false);
 		
-		if (s == null) {
+		if (session.getAttribute("username") == null) {
 			response.sendRedirect("WebContent/login.html");
 		}
 		
-		String username = (String) s.getAttribute("username");
+		String username = (String) session.getAttribute("username");
 		String city = request.getParameter("location");
 		double maxPrice;
 		double surface;

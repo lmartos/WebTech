@@ -13,6 +13,10 @@ public class UserManager {
 	}
 	
 	public <T extends User> void addUser(T user) {
+		String username = user.getUsername();
+		if (users.containsKey(username)) {
+			throw new UserAlreadyExistsException("User " + username + " already exists");
+		}
 		users.put(user.getUsername(), user);
 	}
 	
@@ -32,6 +36,19 @@ public class UserManager {
 	
 	public Collection<User> getUsers() {
 		return users.values();
+	}
+	
+	
+	public <T extends User> boolean userExists(String username, Class<T> clazz) {
+		if (!users.containsKey(username)) {
+			return false;
+		}
+		
+		if (!users.get(username).getClass().equals(clazz)) {
+			return false;
+		}
+		
+		return true;
 	}
 	
 	/**
