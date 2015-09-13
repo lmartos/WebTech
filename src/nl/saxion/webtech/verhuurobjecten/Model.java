@@ -53,12 +53,20 @@ public class Model {
 		this.reservations.add(reseveration);
 	}
 
-	public void AddRoomOwner(RoomOwner roomOwner) {
+	public boolean AddRoomOwner(RoomOwner roomOwner) {
+		if(!roomOwners.contains(roomOwner)){
 		this.roomOwners.add(roomOwner);
+		return true;
+		}
+		return false;
 	}
 
-	public void AddTentant(RoomTentant roomTentant) {
-		this.roomTentants.add(roomTentant);
+	public boolean AddTentant(RoomTentant roomTentant) {
+		if(!roomTentants.contains(roomTentant)){
+			this.roomTentants.add(roomTentant);
+			return true;
+		}
+		return false;
 	}
 	
 	public void addAdmin(Admin admin){

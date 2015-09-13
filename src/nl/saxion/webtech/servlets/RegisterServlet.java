@@ -56,7 +56,7 @@ public class RegisterServlet extends HttpServlet {
 		
 		if (!createUser(type, username, passwordCheck)) {
 			response.sendRedirect("WEB_INF/fouteInlog");
-			System.out.println("Something went wrong, neither of the types were used.");
+			System.out.println("Something went wrong, neither of the types were used or the user already exists.");
 			return;
 		}
 		
@@ -66,11 +66,9 @@ public class RegisterServlet extends HttpServlet {
 	
 	private boolean createUser(String type, String username, String password) {
 		if(type.equals("verhuurder")){
-			model.AddRoomOwner(new RoomOwner(username, password));
-			return true;
+			return model.AddRoomOwner(new RoomOwner(username, password));
 		}else if(type.equals("huurder")){
-			model.AddTentant(new RoomTentant(username, password));
-			return true;
+			return model.AddTentant(new RoomTentant(username, password));
 		} else {
 			return false;
 		}
