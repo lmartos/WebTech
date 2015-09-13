@@ -38,17 +38,8 @@ public class UserManager {
 		return users.values();
 	}
 	
-	
-	public <T extends User> boolean userExists(String username, Class<T> clazz) {
-		if (!users.containsKey(username)) {
-			return false;
-		}
-		
-		if (!users.get(username).getClass().equals(clazz)) {
-			return false;
-		}
-		
-		return true;
+	public boolean userExists(String username) {
+		return users.containsKey(username);
 	}
 	
 	/**

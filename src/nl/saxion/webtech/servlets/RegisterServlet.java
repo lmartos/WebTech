@@ -66,6 +66,10 @@ public class RegisterServlet extends HttpServlet {
 	
 	private boolean createUser(String type, String username, String password) {
 		boolean created = false;
+
+		if (model.getUserManager().userExists(username)) {
+			return false;
+		}
 		
 		if(type.equals("verhuurder")){
 			created = createRoomOwner(username, password);
@@ -77,19 +81,11 @@ public class RegisterServlet extends HttpServlet {
 	}
 	
 	private boolean createTennant(String username, String password) {
-		if (model.getUserManager().userExists(username, Tennant.class)) {
-			return false;
-		}
-		
 		model.getUserManager().addUser(new Tennant(username, password));
 		return true;
 	}
 	
 	private boolean createRoomOwner(String username, String password) {
-		if (model.getUserManager().userExists(username, RoomOwner.class)) {
-			return false;
-		}
-		
 		model.getUserManager().addUser(new RoomOwner(username, password));
 		return true;
 	}
