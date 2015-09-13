@@ -55,7 +55,7 @@ public class RegisterServlet extends HttpServlet {
 		
 		if (!createUser(type, username, passwordCheck)) {
 			response.sendRedirect("WEB_INF/fouteInlog");
-			System.out.println("Something went wrong, neither of the types were used.");
+			System.out.println("Something went wrong, neither of the types were used or the user already exists.");
 			return;
 		}
 		
