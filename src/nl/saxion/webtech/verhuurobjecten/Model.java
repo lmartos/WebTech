@@ -53,6 +53,11 @@ public class Model {
 		this.reservations.add(reseveration);
 	}
 
+	/**
+	 * adds a registering user to the list of roomOwners to enable future logging in
+	 * @param roomOwner the roomOwner object to be registered as user
+	 * @return boolean true if the user does not exist already and will be registered false otherwise
+	 */
 	public boolean AddRoomOwner(RoomOwner roomOwner) {
 		if(!roomOwners.contains(roomOwner)){
 		this.roomOwners.add(roomOwner);
@@ -60,7 +65,13 @@ public class Model {
 		}
 		return false;
 	}
-
+	
+	/**
+	 * adds a registering user to the list of roomTentants to enable future logging in
+	 * @param roomTentant the roomTentant object to be registered as user
+	 * @return boolean true if the user does not exist already and will be registered false otherwise
+	 */
+	
 	public boolean AddTentant(RoomTentant roomTentant) {
 		if(!roomTentants.contains(roomTentant)){
 			this.roomTentants.add(roomTentant);
@@ -69,10 +80,18 @@ public class Model {
 		return false;
 	}
 	
+	/**
+	 * adds a user to the list of Admins to enable future logging in
+	 * @param admin the Admin object to be registered as user
+	 */
 	public void addAdmin(Admin admin){
 		this.admins.add(admin);
 	}
 	
+	/**
+	 * returns a list of all registered users 
+	 * @return returns an ArrayList<BasicUser> containing all registered users
+	 */
 	public List<BasicUser> getAllUsers(){
 			List<BasicUser> allUsers = new ArrayList<BasicUser>();
 			allUsers.addAll(roomTentants);
@@ -85,6 +104,12 @@ public class Model {
 		return rooms;
 	}
 	
+	/**
+	 * returns a roomOwner object which name equals the given username
+	 * @param username username of the roomOwner to be looked up
+	 * @return roomOwner object containing the given username
+	 * @throws Exception throws an exception when the roomOwner is not found
+	 */
 	public RoomOwner getOwner(String username) throws Exception{
 		for (RoomOwner owner : roomOwners) {
 			if (owner.getUsername().equals(username)) {
@@ -94,6 +119,13 @@ public class Model {
 		
 		throw new Exception("room owner not found");
 	}
+	
+	/**
+	 * returns a BasicUser object which name equals the given username
+	 * @param username username of the roomOwner to be looked up
+	 * @return BasicUser object containing the given username
+	 * 
+	 */
 	
 	public BasicUser getUser(String username){
 		for (BasicUser user : getAllUsers()) {
