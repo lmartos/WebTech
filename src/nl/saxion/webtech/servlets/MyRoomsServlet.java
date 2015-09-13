@@ -12,13 +12,15 @@ import javax.servlet.http.HttpSession;
 
 import nl.saxion.webtech.model.Model;
 import nl.saxion.webtech.model.Room;
+import nl.saxion.webtech.model.RoomOwner;
 
-@WebServlet("/SearchRoomServlet")
-public class SearchRoomServlet extends HttpServlet{
+@WebServlet("/MyRoomsServlet")
+public class MyRoomsServlet extends HttpServlet{
+
 	/**
-	 * automatic generated serial version
+	 * 
 	 */
-	private static final long serialVersionUID = 7156768235797726558L;
+	private static final long serialVersionUID = 6014787821777537891L;
 	private Model model;
 	
 	@Override
@@ -31,25 +33,12 @@ public class SearchRoomServlet extends HttpServlet{
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {		
-
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession session = req.getSession(false);
 		
 		if (session.getAttribute("username") == null) {
 			resp.sendRedirect("WebContent/login.html");
-			//TODO: add log.
-		}
-		
-		String location = req.getParameter("location");
-		double maxPrice = 0;
-		double surface = 0;
-		
-		try {
-			maxPrice = Double.parseDouble(req.getParameter("maxPrice"));
-			surface = Double.parseDouble(req.getParameter("surfaceInput"));
-		} catch (NumberFormatException e) {
-			e.getStackTrace();
-			return;
+			//TODO: add Log
 		}
 		
 		resp.setContentType("text/html");
@@ -60,15 +49,15 @@ public class SearchRoomServlet extends HttpServlet{
 	    out.println("<title>Rooms</title>");
 	    out.println("</head>");
 	    out.println("<body bgcolor=\"white\">");
-	    out.println("Rooms available by your specification: <br/>");
+	    out.println("Your rooms: <br/>");
 	    
-	    //voeg de rooms to aan de html code
-		for (Room room : model.getRoomManager().getSpecifiedRooms(location, maxPrice, surface)) {
+	    //voeg de rooms toe aan de html code
+		for (Room room : model.getRoomManager().getRooms(model.getUserManager().getUser((String)session.getAttribute("username"), RoomOwner.class))) {
 			out.println(room.getId() + " : " + room.getCity() + "-" + room.getMaxRentPrice() + "$ -" + room.getSurface() + "m2");
 			out.println("<br/>");
 		}
 		
-		out.println("<a href='javascript:history.back()' >terug naar zoeken</a>");
+		out.println("<a href='javascript:history.back()' >terug naar toevoegen</a>");
 	    out.println("</body>");
 	    out.println("</html>");
 	    out.close();
