@@ -35,9 +35,13 @@ public class SearchRoomServlet extends HttpServlet{
 
 		HttpSession session = req.getSession(false);
 		
-		if (session.getAttribute("username") == null) {
-			resp.sendRedirect("WebContent/login.html");
+		try {
+			@SuppressWarnings("unused")
+			String username = (String) session.getAttribute("username");
 			//TODO: add log.
+		} catch (NullPointerException e) {
+			resp.sendRedirect("login.html");
+			return;
 		}
 		
 		String location = req.getParameter("location");

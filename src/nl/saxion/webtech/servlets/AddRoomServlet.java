@@ -44,12 +44,15 @@ public class AddRoomServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession();
 		
-		
-		HttpSession session = request.getSession(false);
-		
-		if (session.getAttribute("username") == null) {
-			response.sendRedirect("WebContent/login.html");
+		try {
+			@SuppressWarnings("unused")
+			String username = (String) session.getAttribute("username");
+			//TODO: add log.
+		} catch (NullPointerException e) {
+			response.sendRedirect("login.html");
+			return;
 		}
 		
 		String username = (String) session.getAttribute("username");

@@ -36,9 +36,13 @@ public class MyRoomsServlet extends HttpServlet{
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession session = req.getSession(false);
 		
-		if (session.getAttribute("username") == null) {
-			resp.sendRedirect("WebContent/login.html");
-			//TODO: add Log
+		try {
+			@SuppressWarnings("unused")
+			String username = (String) session.getAttribute("username");
+			//TODO: add log.
+		} catch (NullPointerException e) {
+			resp.sendRedirect("login.html");
+			return;
 		}
 		
 		resp.setContentType("text/html");
