@@ -38,7 +38,6 @@ public class SearchRoomServlet extends HttpServlet{
 		try {
 			@SuppressWarnings("unused")
 			String username = (String) session.getAttribute("username");
-			//TODO: add log.
 		} catch (NullPointerException e) {
 			resp.sendRedirect("login.html");
 			return;
